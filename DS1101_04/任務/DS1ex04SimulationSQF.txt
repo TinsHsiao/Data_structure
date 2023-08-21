@@ -1,0 +1,35 @@
+void Simulation::SQF()                                                     	 // definition: shortest queue first
+{   jobType newJob;                                                        	 // the new job
+    int     Qid, minQ;                                                     	 // available queue, shortest queue length
+
+    while (!jobs.isEmpty())
+    {   jobs.nextJob(newJob);                                            	// get & remove the next job
+        if ((newJob.duration == 0) ||
+            (newJob.arrival + newJob.duration > newJob.timeOut))
+            continue;                                                       	// skip the job with a wrong setup
+        for (int i = 0; i < qNum; ++i)                             	// update queue content for each CPU
+            updateQ(i, newJob.arrival);                              	// call: update each queue
+        Qid = -1;                                                           	// assume: no CPU is available
+        for (int i = 0; i < qNum; ++i)
+            if (allQ[i]->avail <= newJob.arrival)
+            {   Qid = i;                                                   	 // available CPU
+                break;                                                     	 // smaller CPU ID is preferred
+            }   //end for-if
+        if (Qid > -1)                                                       	// Cases 1, 2: new job is executed
+        {   allQ[Qid]->avail = newJob.arrival + newJob.duration;            // time to finish new job, the next available time
+            answers.addDoneJob(newJob.jobID, Qid+1, allQ[Qid]->avail, 0);   // call: add one finished job with no delay
+            continue;                                                       	// continue the next job
+        }   //end if
+        minQ = Q_MAX + 1;                                                   // set the upper bound of queue length
+        for (int i = 0; i < qNum; ++i)
+            if (allQ[i]->length() < minQ)
+            {   Qid = i;                                                   	 // the CPU with a shorter queue length
+                minQ = allQ[i]->length();
+            }   //end if-for-if
+        if (minQ == Q_MAX)                                                  // Case 4: all queues are full
+            answers.addAbortJob(newJob.jobID, 0, newJob.arrival, 0);        // call: add one aborted job with no delay 4.1
+        else                                                                	// Case 3: at least one queue is not full
+            allQ[Qid]->enQueue(newJob);                	 // call: append a job into one queue
+    }   //end while
+    finishQ();                                                             	 // call: finish the remaining jobs in queues
+}   //end SQF

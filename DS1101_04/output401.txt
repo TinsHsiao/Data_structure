@@ -1,0 +1,13 @@
+	[Abort Jobs]
+	OID	Abort	Delay
+[1]	5	6	0
+[2]	7	11	0
+[3]	3	15	9
+[4]	4	17	11
+[5]	6	20	10
+	[Jobs Done]
+	OID	Departure	Delay
+[1]	1	7	0
+[2]	2	13	2
+[Average Delay]	4.57 ms
+[Success Rate]	28.57 %
