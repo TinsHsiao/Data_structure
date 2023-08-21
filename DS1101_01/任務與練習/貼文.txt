@@ -1,0 +1,39 @@
+DS1101ex1+挑戰 簡介
+任務一:
+function1: iterativeFib(int number( 註:使用者的輸入 ) )
+(利用迴圈找出費式數列並存於全域N陣列)
+宣告兩個數前一項( previous )與目前這項( current )，迴圈設定索引值( index )為0，從索引項找到第number項，當索引值小於2時，設定為數值1存於N陣列，
+其餘利用N陣列為前一項與目前這項的值相加，再去設定前一項的值為目前這項的值，再將目前這項的值設為N陣列中第index項，依此類推直到索引值等於number，
+number項的費式數列將會存於全域陣列N中。
+
+function2: iterativeFindFactor( int index, unsigned long long int &inner_loop ) 
+( 找出因數相乘的組合並存於全域Factor1、全域Factor2中 )
+宣告除數(divisor)為N陣列中索引項( index )的值，迴圈設定為當除數大於0時會不斷運行，利用inner_loop當迴圈開始運行時加1( 用以計算存取迴圈次數 )；
+當N陣列的索引項能被除數整除時，將除數存於Factor1陣列中的索引項，並將N陣列的索引項除除數的值存於Factor2陣列中的索引項，跳出迴圈；迴圈的最後設定除數減1繼續去找下一個數。
+( 使用平方根的原因；因相差最小的因數相乘組合會由平方根開始為最小( 如平方根為整數時 ) )
+
+function3: iterativePrint( int number, unsigned long long int inner_loop, int outer_loop ) 
+(將所有資料印出)
+宣告索引值( index )為1，迴圈設定當索引值小於等於number( 註:使用者的輸入 )時，利用兩個判斷式去使輸出的排版美觀，呼叫iterativeFindFactor( index, inner_loop ) ( 用以找到因數組合與內部迴圈次數( inner_loop ) )，
+將因數組合跟內部迴圈次數印出，然後繼續將索引值加1向後一個找，初始化內部迴圈圍0，此迴圈( outer_loop )加一去計算次數；跳出迴圈後，印出此函式的迴圈次數。
+
+任務二:
+function1: newFindFactor( int index, unsigned long long int divisor, unsigned long long int inner_recursion )
+( 遞迴找因數組合並且印出來 )
+當一開始除數( divisor )為0時將除數設為N陣列中索引項( index )的平方根，將內部遞迴次數設為1；如果內部遞迴次數超過10000000次，直接印出超過10000000並停止，此判斷式中的兩個判斷是為了排版美觀用(註:此為遞迴停止條件)；
+如果N陣列中索引項的值能被除數整除，此判斷式中的兩個判斷是為了排版美觀用，印出費式數列的值與它的因數相乘組合( 註:此為遞迴停止條件 )；如果前面的判斷都不符合，回傳此函式並將除數往下一個去尋找與江內部遞迴次數加一( newFindFactor( index, divisor-1, inner_recursion + 1 ) ) 。
+
+function2:recursiveFib_FindFactor_Print( unsigned long long int pre, unsigned long long int cur, int index, unsigned long long int number, unsigned long long int outer_recursion )
+( 找出費式數列並呼叫newFindFactor去找出因數組合並印出 )
+如果索引值( index )等於number( 註:使用者的輸入 )時，設定N陣中的索引值為目前這項( cur )，呼叫newFindFactor( index, 0, 0 ) 去找出因數組合並且將其印出，印出此函式的遞迴次數，回傳索引值( 註:此為遞迴停止條件 )；
+設定N陣中的索引值為目前這項( cur )；如果索引值大於0，呼叫newFindFactor( index, 0, 0 ) 去找出因數組合並且將其印出( 註:此為遞迴停止條件 )；回傳自身函式recursiveFib_FindFactor_Print( cur, pre+cur, index + 1, number, outer_recursion+1 )將先前一項的值設定為目前這項，目前這項的值設為目前這項加先前一項，設定為索引值的下一項
+外部遞迴加1去計算次數( 註:往下一個找直到全部找完，目前這項與先前一項的設定，可以去計算出每個從頭加到索引項的數 )
+
+任務三:
+backtrack( int index, int size, vector<int> group, int &inner_times )
+當輸入為2~10間，將它視為此陣列( group )的大小(size)，當索引值( index )等於size時，印出序列；做一個迴圈去跑此陣列的第0項值到它等於size，用以印出此陣列所有的值；序列加一去計算印到第幾項，回傳( 註:此為遞迴停止條件 )；
+設定陣列索引項的值為0，進入迴圈當陣列索引項的小於等於9( 從0跑到9 )；呼叫函式去找陣列中索引項的值是否跟先前的值一樣，如果一樣，將陣列中索引項的值加一，並跳過後面的步驟，回到迴圈的開頭；如果不一樣，呼叫自身函式遞迴找索引的下一個數，將陣列中的索引項的值加一直至9為止( 找完所有的數 )，跳出迴圈。
+
+
+
+
