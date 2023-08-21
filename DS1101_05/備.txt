@@ -1,0 +1,191 @@
+//10927248 連翊安 10927244 蕭合亭 
+# include <iostream>
+# include <vector>
+# include <string>
+# include <fstream>
+# include <iomanip> // 控制小數輸出
+# include <ctime> 
+
+using namespace std ;
+
+struct schoolData {
+	string school ;
+	string major ;
+	string depart ;
+	string level ;
+	int students ;
+	int teachers ;
+	int graduates ; 
+};
+
+struct Tree {
+	schoolData data ;
+	Tree *right ;
+	Tree *left ;
+};
+
+vector<schoolData> data ;
+
+typedef Tree *trees ;
+string text ;
+int DataSize ;
+
+bool Read() { // command = 1 進來 
+	string temp ;  
+	cout << endl << "Input a file number (e.g., 401, 402, ...):" ;
+	cin >> text ;
+
+	temp = "input" + text + ".txt" ;  // set file name
+	
+	fstream file ;
+	file.open( temp.c_str(), ios:: in ) ;     // open the file
+
+	if ( ! file.is_open() ) {         // check the file can be opened 
+		cout << "### " << temp << " does not exist ! ###" << endl ;
+		cout << "There is no data! " << endl ;
+		return false ;
+	} // if()
+
+	else {
+
+		schoolData t ;
+		int unuseint ;
+		string unusestr ;
+		string str1 ;
+		string str2 ;
+		int i = 0 ;
+		getline( file, temp ) ;				// read the title 
+
+		if ( file.eof() ) {
+			cout << "### Get nothing from the file" << temp << " ! ###" << endl ;
+			return false ;
+		} // if()
+		
+		getline( file, temp ) ;	
+		getline( file, temp ) ;	
+
+		while ( file >> unuseint ) {			// Read the data and push into vector 
+			file >> t.school >> unusestr >> t.major  >> str1 >> str2  ;
+			t.depart = str1 + " " + str2 ;
+			file >> str1 >> str2  ;
+			t.level = str1 + " " + str2 ;
+			file >> t.students >> t.teachers >>t.graduates ;
+			getline( file, temp ) ;	
+			data.push_back( t ) ;
+			
+		} // while()
+
+		DataSize = data.size() ;	// set size
+
+	} // else 
+	
+	file.close() ;
+	return true ;
+} // Read()
+
+class binaryTree {
+
+	public :
+		Tree * stree = NULL ;
+		Tree * gtree = NULL ;
+		void Addgtree( trees & head, schoolData t ) { // graduates
+			if ( head == NULL ) {
+				
+				Tree *temp = new Tree ; 
+				temp->data = t ;
+				temp->left = NULL ;
+				temp->right = NULL ;
+				head = temp ; 
+			}
+			
+			else if ( head->data.graduates < t.graduates ) {
+				Addgtree( head->right, t ) ;
+			}
+			
+			else {
+				Addgtree( head->left, t ) ;
+			}
+		}
+		
+		void Addstree( trees &head, schoolData t ) { // schoolname
+		
+			if ( head == NULL ) {
+				Tree *temp = NULL ;
+				temp->data = t ;
+				temp->left = NULL ;
+				temp->right = NULL ;
+				head = temp ;
+			}
+			
+			else if ( head->data.school.compare( t.school ) < 0 ) {
+				Addstree( head->left, t ) ;
+			}
+			
+			else {
+				Addstree( head->right, t ) ;
+			}
+		}
+		
+		void build() {
+			for ( int i = 0; i < data.size(); i++ ) {
+				Addgtree( gtree, data[i] ) ;
+			}
+
+			for ( int j = 0; j < data.size(); j++ ) {
+				Addstree( stree, data[j] ) ;
+			}
+
+		}
+		
+		int Height( trees &head ) {
+			if ( head == NULL ) return 0 ;
+			else  {
+				int right = Height( head->right ) ;
+				int left = Height( head->left ) ;
+				if( right > left ) return right ;
+				else return left ;
+			}
+		}
+	
+};
+
+void do_command( int i ) {
+	binaryTree a ;
+	if ( i == 0 ) return ;
+	else if ( i == 1 ) {
+		Read() ;
+		a.build() ;
+		int g = a.Height( a.gtree ) ;
+		int s = a.Height( a.stree ) ;
+	}
+}
+
+void Preface() {
+	
+	cout << endl << "*** University Graduate Information System ***" ;
+	cout << endl << "* 0. Quit                            		  *" ;
+	cout << endl << "* 1. Create Two Binary Search Trees          *" ;
+	cout << endl << "* 2. Search by Number of Graduates           *" ;
+	cout << endl << "* 3. Search by School Name                   *" ;
+	cout << endl << "**********************************************" ;
+	cout << endl << "Input a command(0, 1, 2, 3): " ;
+
+} // Preface()
+
+int main() {
+ 	
+	string temp ;
+ 	int command ;
+ 	int gheight, sheight ;
+ 	bool test = true ;
+ 	binaryTree t ;
+ 	do {
+ 		Preface() ;
+		cin >> command ;
+		do_command( command ) ;
+		test = false ;
+ 		
+	} while ( test ) ;
+ 	
+} // main()
+
