@@ -1,0 +1,61 @@
+isOperator傳入參數去判斷他是不是運算子
+
+isBracket傳入參數判斷式是不是括號
+
+isWhitespace傳入參數判斷式是不是空格tab或enter
+
+islegalchar去呼叫上述三個函示去判斷是否為合法字元
+
+read用來讀入使用者輸入的字串
+
+bracketmatch利用堆疊
+在迴圈裡判斷每遇一個左括號就push進去
+如果遇到右括號就去pop掉左括號
+當堆疊是空的的時候 就代表多了一個右括號
+迴圈結束後
+如果是空的就代表左括號跟右括號都有對應到
+如果不是就代表多了一個左括號
+
+isinfix
+先宣告一個布林值與字串長度
+布林record是表示此項數字是否被括號包起來
+利用迴圈去看每個字元
+如果是數字就去判斷有沒有右括弧接數字或是數字接左括號或是record為true的情況
+有的話就return false並表示為多一個運算元
+如果是運算子且第一個是運算子或有連續的運算子或運算子為字串最後一項
+就return false並表示為多一個運算子
+如果是第運算子且被括號包起來
+就return false並表示為非中序的錯誤
+如果是左括號且下一個字元為右括號
+就return false且鰾是為非中序的錯誤
+如果是數字被包起來就將record設為true
+
+cheakerror是判斷是否為中序式 如果都是合法字元、括號都有對應到、且順序都符合中序
+就表示為合法的中序式
+
+priority是為了給一個值以判斷運算元的優先順序
+
+
+任務三
+
+arithmetic 會傳入存數字的堆疊跟運算子
+宣告兩個int為存數字的最上層的值
+每宣告完就pop掉
+傳入的oper是什麼就做什麼的運算
+如果是除 當除數等於0就returnfalse並表示除數等於0的錯誤
+運算結束後把值回堆疊
+
+calculate 會傳入一個list型別的class
+宣告一個型別為int的堆疊num
+宣告一個operand型別為int
+宣告一個布林test為true
+迴圈判斷post不為空的時
+再去判斷如果字元為數字並將char轉int存到operand
+push到num裡再把operand設為0
+判斷如果是空的的話就結束迴圈
+判斷如果是運算子就呼叫arithmetic 如果回傳為false
+就將test轉為flase 並結束迴圈
+迴圈到底時delete掉post的頭
+
+如果test為true印出他的answer
+如果為false就表示運算無法成功
